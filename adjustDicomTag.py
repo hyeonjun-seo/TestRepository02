@@ -89,7 +89,7 @@ def update_dicom_file(input_file, output_dir, study_id, study_uid, sop_uid, pati
 
 def main():
     input_dir = sys.argv[1] if len(sys.argv) > 1 else "."
-    output_dir = "../modified_dcm"
+    output_dir = "modified_dicom"
 
     # Use a dictionary to cache study-level info (StudyID, StudyInstanceUID, PatientAge)
     study_level_info_cache = {}

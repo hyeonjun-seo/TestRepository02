@@ -8,7 +8,6 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-.idea/
 build/
 develop-eggs/
 dist/
@@ -38,6 +37,8 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+dicom_storage/
+modified_dicom/
 htmlcov/
 .tox/
 .nox/
@@ -136,6 +137,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.idea/
 
 # Spyder project settings
 .spyderproject
