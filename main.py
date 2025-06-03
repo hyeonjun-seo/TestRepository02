@@ -61,6 +61,7 @@ async def store_studies(files: List[UploadFile] = File(...), db: AsyncSession = 
         patient_birth_date = ds.get("PatientBirthDate")
         patient_sex = ds.get("PatientSex")
         study_id = ds.get("StudyID")
+        laterality = ds.get("Laterality")
 
         if not study_date:
             raise HTTPException(status_code=400,
@@ -76,6 +77,9 @@ async def store_studies(files: List[UploadFile] = File(...), db: AsyncSession = 
                                 detail=f"DICOM file {file.filename} is missing PatientSex (0010,0040).")
         if not study_id:
             raise HTTPException(status_code=400, detail=f"DICOM file {file.filename} is missing StudyID (0020,0010).")
+        if not laterality:
+            raise HTTPException(status_code=400,
+                                detail=f"DICOM file {file.filename} is missing Laterality (0020,0060).")
 
         image_uid = ds.get("SOPInstanceUID")
         filename = f"{image_uid}.dcm"
@@ -129,7 +133,7 @@ async def store_studies(files: List[UploadFile] = File(...), db: AsyncSession = 
             image = Image(
                 study_key=study.study_key,
                 image_uid=image_uid,
-                laterality=ds.get("Laterality", "U"),
+                laterality=laterality,
                 score=0,
                 image_path=absolute_filepath
             )

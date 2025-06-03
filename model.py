@@ -40,7 +40,7 @@ class Image(Base):
     study_key = Column(Integer, ForeignKey("study.study_key", ondelete="CASCADE"), nullable=False)
 
     image_uid = Column(String, unique=True, index=True)
-    laterality = Column(String)
+    laterality = Column(String, nullable=False)
     score = Column(Integer)
     image_path = Column(String)
     created_date = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

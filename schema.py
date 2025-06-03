@@ -18,7 +18,7 @@ class PatientSchema(BaseModel):
 class ImageSchema(BaseModel):
     image_key: int
     image_uid: str
-    laterality: Optional[str]
+    laterality: str
     score: Optional[int]
     image_path: str
     created_date: datetime
