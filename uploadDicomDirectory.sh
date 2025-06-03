@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DICOM_DIR="modified_dicom"
-API_URL="http://localhost:8000/dicom-web/studies"
+API_URL="http://localhost:18000/dicom-web/studies"
 
 CURL_COMMAND="curl -X POST \"$API_URL\" -H \"Content-Type: multipart/form-data\""
 
