@@ -19,9 +19,10 @@ class ImageSchema(BaseModel):
     image_key: int
     image_uid: str
     laterality: str
-    score: Optional[int]
+    score: Optional[float]
     image_path: str
     created_date: datetime
+    updated_date: datetime
 
     class Config:
         from_attributes = True
@@ -32,8 +33,9 @@ class StudySchema(BaseModel):
     study_id: str
     study_uid: str
     study_date: str
-    result: Optional[int]
+    result: Optional[float]
     created_date: datetime
+    updated_date: datetime
 
     patient: PatientSchema
     images: List[ImageSchema] = []
