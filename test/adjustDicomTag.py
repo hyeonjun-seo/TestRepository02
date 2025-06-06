@@ -89,7 +89,12 @@ def update_dicom_file(input_file, output_dir, study_id, study_uid, sop_uid, pati
 
 def main():
     input_dir = sys.argv[1] if len(sys.argv) > 1 else "."
-    output_dir = "modified_dicom"
+    base_output_dir = sys.argv[2] if len(sys.argv) > 2 else "modified_dicom"
+
+    input_dir = os.path.abspath(input_dir)
+    base_output_dir = os.path.abspath(base_output_dir)
+
+    os.makedirs(base_output_dir, exist_ok=True)
 
     # Use a dictionary to cache study-level info (StudyID, StudyInstanceUID, PatientAge)
     study_level_info_cache = {}
@@ -127,6 +132,8 @@ def main():
             study_level_info_cache[study_key] = study_data
 
         _, new_sop_uid = generate_uids()
+
+        output_dir = os.path.join(base_output_dir, study_data["study_id"])
 
         update_dicom_file(
             full_path,

@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from typing import List
 
 import aiofiles
+import httpx
 import pydicom
 from PIL import Image as PILImage
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException
@@ -11,7 +12,6 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-import httpx
 
 from database import get_db, engine, Base
 from model import Patient, Study, Image
@@ -30,8 +30,11 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-DICOM_DIR = "dicom_storage"
-IMAGE_DIR = "image_storage"
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+STORAGE_DIR = os.path.join(PROJECT_ROOT, "storage")
+DICOM_DIR = os.path.join(STORAGE_DIR, "dicom")
+IMAGE_DIR = os.path.join(STORAGE_DIR, "image")
+
 os.makedirs(DICOM_DIR, exist_ok=True)
 os.makedirs(IMAGE_DIR, exist_ok=True)
 
@@ -124,12 +127,12 @@ async def store_studies(files: List[UploadFile] = File(...), db: AsyncSession = 
         if extracted_image_bytes and extracted_image_filename:
             try:
                 async with httpx.AsyncClient() as client:
-                    files = {
+                    files_to_predict = {
                         'file': (extracted_image_filename, extracted_image_bytes, 'image/png')
                     }
                     response = await client.post(
                         SCORING_API_URL,
-                        files=files
+                        files=files_to_predict
                     )
                     response.raise_for_status()
                     scoring_result = response.json()
